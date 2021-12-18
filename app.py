@@ -358,3 +358,7 @@ def opencv_fd():
                             app_name='Lyfas Camera Based Health Monitoring',
                            )
 
+if __name__ == '__main__':
+     
+        PORT=int(os.environ.get('PORT', 5000))
+        serve(app, port=PORT)
