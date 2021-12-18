@@ -1,0 +1,198 @@
+﻿/********My AAppend*/
+
+.actions, .chart {
+    margin: 15px auto;
+    width: 34px;
+}
+button {
+    background: none repeat scroll 0 0 #E3E3E3;
+    border: 1px solid #BBBBBB;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 0 1px 1px #F6F6F6 inset;
+    color: #333333;
+    font: bold 12px;
+    margin: 0 5px;
+    padding: 8px 0 9px;
+    text-align: center;
+    text-shadow: 0 1px 0 #FFFFFF;
+    width: 150px;
+}
+button:hover {
+    background: none repeat scroll 0 0 #D9D9D9;
+    box-shadow: 0 0 1px 1px #EAEAEA inset;
+    color: #222222;
+    cursor: pointer;
+}
+
+video 
+{
+    position:absolute;
+}
+   canvas {
+    position:absolute;    
+    z-index:20;
+    
+   
+  }
+   svg {
+    position:relative;    
+    z-index:20;
+    
+   
+  }
+  /*********D3*****/
+   .axis path, .axis line
+        {
+            fill: none;
+            stroke: #777;
+            shape-rendering: crispEdges;
+        }
+        
+        .axis text
+        {
+            font-family: 'Arial';
+            font-size: 13px;
+        }
+        .tick
+        {
+            stroke-dasharray: 1, 2;
+        }
+        .bar
+        {
+            fill: FireBrick;
+        }
+        
+       
+        /****************/
+button:active {
+    background: none repeat scroll 0 0 #D0D0D0;
+    box-shadow: 0 0 1px 1px #E3E3E3 inset;
+    color: #000000;
+}
+/**********************/
+
+/************ Emotion */
+	#overlay {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				-o-transform : scaleX(-1);
+				-webkit-transform : scaleX(-1);
+				transform : scaleX(-1);
+
+				width : 600px;
+				height : 450px;
+			}
+
+			#videoel {
+				-o-transform : scaleX(-1);
+				-webkit-transform : scaleX(-1);
+				transform : scaleX(-1);
+
+				width : 600px;
+				height : 450px;
+			}
+			
+			#container {
+				position : relative;
+				width : 370px;
+				/*margin : 0px auto;*/
+			}
+			
+			#content {
+				margin-top : 50px;
+				margin-left : auto;
+				margin-right : auto;
+				max-width: 600px;
+			}
+			
+			#sketch, #filter {
+				display: none;
+			}
+			
+			
+			.btn {
+				font-family: 'Lato';
+				font-size: 16px;
+			}
+
+			#controls {
+				text-align : center;
+			}
+
+			#emotion_container {
+				width: 600px;
+			}
+
+			#emotion_icons {
+				height: 50px;
+				padding-left: 20px;
+			}
+
+			.emotion_icon {
+				width : 40px;
+				height : 40px;
+				margin-top: 45px;
+				/*margin-left : 13px;*/
+				margin-left : 5px;
+                align-content:flex-start;
+			}
+
+			#emotion_chart, #emotion_icons {
+				margin: 0 auto;
+				width : 400px;
+			}
+
+			#icon1, #icon2, #icon3, #icon4, #icon5, #icon6 {
+				visibility : hidden;
+			}
+
+			/* d3 */
+			.bar {
+				fill : steelblue;
+				fill-opacity : .9;
+			}
+
+/************************/
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 480px;
+}
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
