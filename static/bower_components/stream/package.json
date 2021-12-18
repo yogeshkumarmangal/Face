@@ -1,0 +1,11 @@
+{
+ "name": "stream",
+ "version": "3.46.1",
+ "main": "stream.min.js",
+ "description": "'stream' nodejs core module browserify-ied with `--standalone stream`. Should support all module systems (commonjs, AMD & `window.stream`) - check browserify docs.",
+ "keywords": [
+  "nodejs",
+  "browserify",
+  "stream"
+ ]
+}
