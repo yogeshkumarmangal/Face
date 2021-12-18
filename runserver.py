@@ -3,7 +3,6 @@ This script runs the FlaskWebProject1 application using a development server.
 """
 
 from os import environ
-from FlaskWebProject1 import app 
 from waitress import serve
 import os
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
