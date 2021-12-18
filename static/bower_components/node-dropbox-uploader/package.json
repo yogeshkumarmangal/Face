@@ -1,0 +1,51 @@
+{
+  "name": "node-dropbox-uploader",
+  "description": "Uploads files to a Dropbox folder form the command line. The tool has been designed for usage on remote servers as part of an automated script such as database backups.",
+  "keywords": [
+    "backup",
+    "dropbox"
+  ],
+  "version": "0.0.3",
+  "author": {
+    "name": "Ben Hall",
+    "email": "Ben@BenHall.me.uk",
+    "url": "Ocelot Uproar Ltd"
+  },
+  "main": "app.js",
+  "bin": {
+    "node-dropbox-uploader": "./bin/node-dropbox-uploader"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "scripts": {
+    "start": "app.js",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "dropbox": "^0.10.3",
+    "minimist": "^0.2.0"
+  },
+  "devDependencies": {},
+  "_id": "node-dropbox-uploader@0.0.3",
+  "dist": {
+    "shasum": "e2469952ec460cf0d448c13981f63dcd97ed323b",
+    "tarball": "https://registry.npmjs.org/node-dropbox-uploader/-/node-dropbox-uploader-0.0.3.tgz"
+  },
+  "_from": "node-dropbox-uploader@latest",
+  "_npmVersion": "1.4.3",
+  "_npmUser": {
+    "name": "benhall",
+    "email": "ben@benhall.me.uk"
+  },
+  "maintainers": [
+    {
+      "name": "benhall",
+      "email": "ben@benhall.me.uk"
+    }
+  ],
+  "directories": {},
+  "_shasum": "e2469952ec460cf0d448c13981f63dcd97ed323b",
+  "_resolved": "https://registry.npmjs.org/node-dropbox-uploader/-/node-dropbox-uploader-0.0.3.tgz"
+}
