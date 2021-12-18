@@ -1,0 +1,20 @@
+<head>
+    <style type="text/css">
+        .auto-style1 {
+            color: #990000;
+        }
+        .auto-style2 {
+            color: #6666FF;
+        }
+    </style>
+</head>
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <form action="abc" method="post">
+    Project file path: <input type="text" name="projectFilepath"/><br/>
+    <input type="submit" value="Submit"/>
+</form>
+<span class="auto-style2">The Result is</span> :: <span class="auto-style1"><strong>{{result}}</strong></span>
+{% endblock %}

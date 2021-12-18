@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block content %}
+            <div id="content">
+                <form method="post" action="{{ url_for('factorial') }}">
+                  <label for="Number">Please enter a Number</label>
+                  <input type="text" name="number" /><br />
+                  
+                  <input type="submit" value="Find Factorial"/>
+                </form>
+            </div>
+    
+{% endblock %}     

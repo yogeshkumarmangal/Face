@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta name="author" content="">
+		<meta charset="utf-8">
+
+		<!-- <link href="../static/css/main.css" rel="stylesheet" type="text/css" /> -->
+
+		<!-- SUPPORT FOR IE6-8 OF HTML5 ELEMENTS -->
+		<!--[if lt IE 9]>
+					<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<![endif]-->
+
+		<!-- <link rel="shortcut icon" href="{{ url_for('static', filename='ico/favicon.ico') }}"> -->
+	<!--	{% block head %}
+			<title>{% block title %} Title!{% endblock %}</title>
+		{% endblock %}
+        -->
+        <title> A Simple Chart</title>
+    <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
+    <script src="/static/scripts/modernizr-2.6.2.js"></script>
+	</head>
+
+	<body>
+          <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">{{app_name}}</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                     <li><a href="{{ url_for('form') }}">Utility</a></li>
+                     <li><a href="{{ url_for('fact') }}">Factorial</a></li>
+                     <li><a href="{{ url_for('chart') }}">Chart</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+        <div  id="container">
+            <ul>
+                <li>
+		<div id={{ chartID|safe }} class="chart" style="height: 100px; width: 500px" ></div>
+                </li>
+                </ul>
+       </div>
+		<script>
+		    var chart_id = {{ chartID|safe }}
+		    var series = {{ series|safe }}
+		    var title = {{ title|safe }}
+		    var xAxis = {{ xAxis|safe }}
+		    var yAxis = {{ yAxis|safe }}
+		    var chart = {{ chart|safe }}
+		</script>
+			<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+			<script src="http://code.highcharts.com/highcharts.js"></script>
+			<script src="../static/js/main.js"></script>
+        
+        
+         
+	</body>
+</html>

@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}.</h2>
+ 
+ <script src={{ url_for('static', filename='./bower_components/webcamjs/webcam.js') }}></script>
+    <div id="my_camera" style="width:320px; height:240px;"></div>
+    <div id="my_result"></div>
+
+    <script language="JavaScript">
+        Webcam.attach('#my_camera');
+        var dropboxAccessToken = 'ivQfY-JHUqgAAAAAAAALfUj3C6jwDzqdAJwwjXtWWylj3Ypgx02esCCB6jPJWPSJ';
+        function take_snapshot() {
+            Webcam.snap(function (data_uri) {
+                document.getElementById('my_result').innerHTML = '<img src="' + data_uri + '"/>';
+                var fname = 'file://c:/users/rupam/desktop/rdas.jpg'
+                var http = require('http'),
+    Stream = require('stream').Transform,
+    fs = require('fs');
+
+                var url = data_uri;
+                http.request(url, function (response) {
+                    var data = new Stream();
+
+                    response.on('data', function (chunk) {
+                        data.push(chunk);
+                    });
+
+                    response.on('end', function () {
+                        fs.writeFileSync(fname, data.read());
+                    });
+                }).end();
+                alert('file saved')
+                upload(fname);
+            });
+        }
+        var dropboxUrl = '';
+        function upload(fname) {
+
+          
+            var uploadFile = require('dropbox-upload');
+            //alert('uploading')
+            console.log('Uploading ' + fname + ' to /Apps')
+            alert('Uploading ' + fname + ' to /Apps')
+            uploadFile( fname, '/Apps/IoT', dropboxAccessToken, function () {
+                console.log('uploaded-----------------');
+               
+                //////////////// Generating Audio Link///////////////////////////////
+                console.log('sharing........  /Apps/IoT/' + fname);
+                var Dropbox = require('dropbox');
+                var dbx = new Dropbox({ accessToken: dropboxAccessToken });
+
+                dbx.sharingCreateSharedLink({ path: '/Apps/IoT/' + fname })
+             .then(function (response) {
+                 console.log(response);
+                 var link = response["url"].toString().replace("dl=0", "dl=1");
+                 console.log('Your Image link-------->\n' + link);
+                 
+                 dropboxUrl = link;
+                 
+
+             }
+
+             )
+            }
+             );
+
+        }
+    </script>
+<br />
+    <a href="javascript:void(take_snapshot())">Take Snapshot</a>
+<p>
+    &nbsp;</p>
+{% endblock %}

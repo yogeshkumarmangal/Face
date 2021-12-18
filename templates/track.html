@@ -1,0 +1,604 @@
+<head>
+    <style type="text/css">
+        #Text1 {
+            width: 514px;
+        }
+
+    </style>
+</head>
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}.</h2>
+
+ <script src={{ url_for('static', filename='./bower_components/tracking/build/tracking-min.js') }}></script>
+ <script src={{ url_for('static', filename='./bower_components/tracking/build/data/face-min.js') }}></script>
+  <script src={{ url_for('static', filename='./bower_components/tracking/build/dat.gui.min.js') }}></script>
+   <script src={{ url_for('static', filename='./bower_components/tracking/build/dat.gui.min.js') }}></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+
+  
+
+
+  <div class="demo-title">
+   <img src="../static/images/lyfas.png" width="400" height="300" />
+      <p>
+      <label for="Text1" >Your Name:</label>
+          <input id="Text1" type="text" /></p>
+      <button onclick="myScan()" id="btnScan">Start Scanning</button>
+  </div>
+ <form method="post" action="{{ url_for('face_stat') }}">
+<input type="hidden" name="tag_list" id="tag_list" value="" />
+
+     </form>
+<br />
+
+
+    <br />
+   
+            <table border="1">
+                
+                <tr>
+                    <td width="160" height="120" align="left" valign="top"> 
+                        <div class="demo-frame">
+                            <div class="demo-container">
+                                <video id="video" width="160" height="120"></video>
+                                <canvas id="canvas" width="160" height="120"></canvas>
+                            </div>
+
+                        </div>
+                    </td>
+                    <td width="240" height="320" align="left" valign="top">
+                        <div class="demo-frame">
+                            <div class="demo-container">
+                                <canvas id="canvas_face" width="240" height="320"></canvas>
+                           <!--
+                               <img height="320" width="240" src="../static/images/artery.png" id="art"/>
+                           -->     
+                            </div>
+
+                        </div>
+                    </td>
+                    <td>
+                        <svg id="chart" width="600" height="300"></svg>
+                    </td>
+                </tr>
+            </table>
+
+           <li>
+               
+    <p>
+        <h3>Statistics: <var id="stat">PR: SPO2:</var></h3>
+        Calculation in  progress:
+        <progress value="0" max="100" id="prg">
+        </progress>
+    </p>
+</li>
+<div id="canvasImg">
+    <table border="1">
+        <tr>
+
+            <td>
+
+                <img id="canvasImg1" alt="Right click to save me!">
+            </td>
+        </tr>
+    </table>
+</div>
+      
+
+    <script>
+        /////////////// Pulse Peak Detection Method//////////
+         // JScript source code
+    var peakCount=0;
+
+    var ra=0;
+    var pc=0;// percentage to uopdate the ui progressbar
+    var min=9999;
+    var spo2=98;
+    var resp=0;
+    var rav=0, rs0=-100,rs1=-100,rra=0;
+    var rpeak=0;
+    var noFace=0;
+    var lastSeenPeakAt=0.0;
+    var rn=-1;
+    var respA=0;
+    var fwave=0;
+    var maxima=0.0;
+    var s0=-100,s1=-100,s2=-100;
+    var elapsed=5;
+    var ampTh=0,elapsedTh=450;
+    var Maxima=0,Minima=9999;
+        var doScan=false;
+        function myScan()
+        {
+        doScan=true;
+         document.getElementById("canvasImg").style.visibility = "hidden";
+         document.getElementById("btnScan").style.visibility = "hidden";
+        elapsed=0;
+        startTime=(new Date()).getTime();
+        peakCount=0;
+        s0=-100;s1=-100;s2=-100;
+        ra=0;
+        lineData=[];
+        n=0;
+        pc=0;
+        document.getElementById("prg").value = ""+pc;
+        $("#stat").text("PR: "+" Spo2: ");
+       context_face.clearRect(0, 0, canvas_face.width, canvas_face.height);
+        document.getElementById('canvasImg').src = null;
+
+        }
+    function Step(Value)
+    {
+
+
+        elapsed=  ((new Date()).getTime()-lastSeenPeakAt);
+/*
+        System.out.println("TerminalActivity.isFacePulse in alog2="+TerminalActivity.isFacePulse+" value="+Value+" elapsed="+elapsed);
+*/
+
+
+
+        var s=Value;
+
+
+
+        if(s0==-100)
+        {
+            s0=s;
+        }
+        else if(s1==-100)
+        {
+
+            s1=s;
+            ra=(s1+s0)/2;
+
+        }
+        else
+        {
+
+
+          //  var av=(s0+s1+s)/3;
+          var av=(.499*s0+.49*s1+.001*s);
+            if(av<min)
+            {
+                min=av;
+            }
+
+
+            var condition=s1>s0 && s1>av && elapsed>=elapsedTh ;
+        console.log("s0="+s0+" s1="+s1+" av="+av+" elapsed="+elapsed+" ra="+ra+" condition="+condition);
+            if(condition)
+            {
+                hasPeak=true;
+                elapsed=0;
+
+                maxima=s1;
+
+
+                lastSeenPeakAt=(new Date()).getTime();
+
+
+                /// Spo2......
+                if(min!=0)
+                {
+                    var spo21=100-((maxima-min)/Math.abs(min));
+                    spo2=~~(spo21+spo2)/2;
+                }
+                //respiratory...
+                ra=(ra+av)/2;
+                if(peakCount==0)
+                {
+                    startTime=(new Date()).getTime();
+                }
+
+                peakCount++;
+/*
+                    System.out.println("-----> peaks:"+peakCount+" elapsed: "+(System.currentTimeMillis()-startTime) );
+*/
+                if( ( (new Date()).getTime()-startTime)>=20000)
+                {
+                    //int spo2=(int)(s1*100/av);
+
+
+                    // Parameters.SPO2=(Parameters.SPO2+spo2)/2;
+                    var den=((new Date()).getTime()-startTime);
+
+                    if(den!=0)
+                    {
+                        var bpm =  ~~(60 * 1000 * ((peakCount - 1)) / den);
+                        peakCount = 0;
+                        pc = 100;
+                        startTime = (new Date()).getTime();
+        $("#stat").text("PR: "+bpm+" Spo2: "+spo2 + "✓"  );
+
+
+
+        doScan=false;
+          document.getElementById("btnScan").style.visibility = "visible";
+   // document.body.appendChild(canvas);
+        // window.open(canvas.toDataURL("image/png"), '_blank');
+         alert("Scan Complete... Take a Screenshot of this Page");
+
+                    }
+                }
+                else
+                {
+
+                    pc=(5*((new Date()).getTime()-startTime)/1000);
+                    if(pc>100)
+                    {
+                        pc=100;
+                    }
+        document.getElementById("prg").value = ""+pc;
+
+                }
+
+                elapsed=0;
+            }
+            else
+            {
+                elapsed++;
+            }
+            s0=s1;
+            s1 = av;
+            ra=(.9*ra+.1*av)/2;
+
+        }
+
+
+
+        return ra;
+
+    }
+
+        ////////////////////Pulse Peak Detection Ends Here///////
+        function truncateToInt(x)
+{
+    if(x > 0)
+    {
+         return Math.floor(x);
+    }
+    else
+    {
+         return Math.ceil(x);
+    }
+ }
+      var xc = 0, yc = 0;
+        var lastVal=0;
+        var startTime=new Date().getTime();
+        var v0=0,v1=0,v2=0;
+        var yc1=0;
+        var myRect={x:-1,y:-1,width:-1,height:-1}
+      var lineData = [];
+      var dist = 0; //width/10
+      var n = 0;// point num
+
+
+
+        function getAverageRGB(canvas,context) {
+
+    var blockSize = 1, // only visit every 5 pixels
+        defaultRGB = {r:0,g:0,b:0}, // for non-supporting envs
+
+        data, width, height,
+        i = -4,
+        length,
+        rgb = {r:0,g:0,b:0},
+        count = 0;
+
+    if (!context) {
+        return defaultRGB;
+    }
+
+    height = canvas.height/3 ;//= imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+    width = canvas.width ;//= imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
+
+   // context.drawImage(imgEl, 0, 0);
+
+    try {
+        data = context.getImageData(0, 0, width, height);
+    } catch(e) {
+        /* security error, img on diff domain */
+        return defaultRGB;
+    }
+
+    length = data.data.length;
+
+    while ( (i += blockSize * 4) < length ) {
+        ++count;
+        rgb.r += data.data[i+2];
+        rgb.g += data.data[i+1];
+        rgb.b += data.data[i];
+    }
+
+    // ~~ used to floor values
+        var av=(rgb.r+rgb.g+rgb.b)/3;
+    rgb.r = Math.abs((rgb.r-av)/count);
+    rgb.g = Math.abs( (rgb.g)/count);
+    rgb.b = Math.abs((rgb.b)/count);
+
+    return rgb;
+
+}
+      window.onload = function () {
+          var video = document.getElementById('video');
+
+          var canvas = document.getElementById('canvas');
+          var context = canvas.getContext('2d');
+
+       var canvas_face = document.getElementById('canvas_face');
+          var context_face = canvas_face.getContext('2d');
+
+          var tracker = new tracking.ObjectTracker('face');
+        document.getElementById("canvasImg").style.visibility = "hidden";
+          tracker.setInitialScale(2);
+          tracker.setStepSize(4);
+          tracker.setEdgesDensity(0.1);
+
+          tracking.track('#video', tracker, { camera: true });
+
+          tracker.on('track', function (event) {
+
+        //      context.clearRect(0, 0, canvas.width, canvas.height);
+
+              var result = [];
+              dist = 0;
+
+      var ii=0;
+              event.data.forEach(function (rect) {
+        result.push({'x':rect.x,'y':""+yc1,'width':rect.width,'height':rect.height});
+
+
+
+        if(ii==0)
+      {
+
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        if(noFace>200)
+        {
+        myRect.x=-1;
+        myRect.y=-1;
+        myRect.height=-1;
+        myRect.width=-1;
+        document.getElementById("btnScan").style.visibility = "visible";
+        document.getElementById("canvasImg").style.visibility = "hidden";
+        elapsed=0;
+        startTime=(new Date()).getTime();
+        peakCount=0;
+        s0=-100;s1=-100;s2=-100;
+        ra=0;
+        lineData=[];
+        n=0;
+        pc=0;
+        document.getElementById("prg").value = ""+pc;
+        $("#stat").text("PR: "+" Spo2: ");
+       context_face.clearRect(0, 0, canvas_face.width, canvas_face.height);
+        document.getElementById('canvasImg').src = null;
+        }
+        noFace=0;
+
+        if( myRect.y<0 )
+        {
+        myRect.x=rect.x;
+        myRect.y=rect.y;
+        myRect.width=rect.width;
+        myRect.height=rect.height;
+        }
+
+
+
+
+
+        //////////
+      }
+
+
+              });
+             // var s = JSON.stringify(result);
+              //$('#tag_list').val(s);
+              //console.log(s);
+
+              /// Now post this data to face_stat
+              $.ajax({
+                  url: '/face_stat',
+                  crossDomain:true,
+                  dataType: "json",
+                  data: { 'stat': JSON.stringify(result) },
+                  type: 'POST',
+                  success: function (response)
+                  {
+        if(!doScan)
+        return;
+        if(noFace<220)
+        {
+          var data = JSON.parse(response);
+                    // alert(data)
+                       xc = data['xc'];
+                       yc =""+yc1;// data['yc'];
+
+        //////////// Taking it into Response Section/////////
+         context.strokeStyle = '#a64ceb';
+                  context.strokeRect(myRect.x, myRect.y, myRect.width, myRect.height);
+                  context.font = '11px Helvetica';
+                  context.fillStyle = "#fff";
+                  //context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+                  //context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+                  //context.fillText('CENTER-*-PYTHON', xc, yc);
+                  //dist = rect.width / 2;
+        ///////////////////// tracking starts////////
+        context_face.drawImage(video,myRect.x*4+10,myRect.y*4,myRect.width*4-10,myRect.height*4,0,0,240,320);
+        //var img = document.getElementById("art");
+       // context_face.drawImage(img,0,0,240,320,0,0,240,320);
+        rgb=getAverageRGB(canvas_face,context_face);
+        if(rgb.g!=0)
+        {
+        yc1=parseFloat((rgb.g/10+"").split(".")[1].substring(0,3));
+        yc2=yc1;
+        //yc1=rgb.r;
+        //yc1=rgb.g-lastVal;
+       // lastVal=yc1;
+       // yc1=(rgb.g % 1).toFixed(3)*100;
+         //// Low pass filtering/////
+        /*
+        v0 = v1;
+			v1 = v2;
+
+			v2 = (5.781488027648846284e+0 * yc1)
+				 + (-11.95673106852656530918 * v0)
+				 + (-6.91570128577762233135 * v1);
+        var yc2=((v2-v0));
+        */
+       // yc1=yc2;
+       console.log("red value="+rgb.r +" dec part:"+yc1 +" post filtering"+ (yc2)+" vo="+v0+" v1="+v1+" v2="+v2);
+        console.log(new Date().getTime()-startTime+","+yc1);
+        yc1=yc2;
+
+
+        /////////Tracking ends/////////
+
+                      var avY=Step(yc1);
+
+
+          //                 console.log('ha ha ' + response);
+
+                           //$('#Text1').val("Python:: xc=" + xc + ' yc:' + yc);
+
+                               if (lineData.length > 500) {
+                                   lineData=[];
+                                    n=0;
+                               }
+                               lineData.push({ x: xc, y: avY, r: avY, num: n })
+                               n++
+                               InitChart();
+                               //scatterPlot();
+        /////////// here Put the tracking code
+
+        }
+        }
+        noFace++;
+                  },
+                  error: function (error)
+                  {
+                      //alert(error);
+                      console.log('chi chi'+error);
+                  }
+              });
+          });
+
+
+      };
+      function scatterPlot() {
+          var svg = d3.select("#chart")
+            .append("svg")
+            .attr("width", 300)
+            .attr("height", 30);
+
+          svg.selectAll("circle")
+         .data(lineData)
+         .enter()
+          .append("circle")
+
+          .attr("cx", function (d) {
+              return d.x;
+          })
+   .attr("cy", function (d) {
+       return d.y;
+   })
+   .attr("r", function (d) {
+       return Math.sqrt(d.r);
+   }).attr('stroke', 'green')
+          .attr('stroke-width', 2)
+          .attr('fill', 'none');
+
+          svg.selectAll("text")
+   .data(dataset)
+   .enter()
+   .append("text")
+
+          .text(function (d) {
+              return d.x + "," + d.y;
+          })
+           .attr("x", function (d) {
+               return d.x;
+           })
+   .attr("y", function (d) {
+       return d.y;
+   })
+          .attr("font-family", "sans-serif")
+   .attr("font-size", "11px")
+   .attr("fill", "red");
+      }
+      function InitChart() {
+          //alert('Line chart Demo')
+
+          d3.selectAll("svg > *").remove();
+          var vis = d3.select('#chart'),
+         WIDTH = 600,
+          HEIGHT = 300,
+          MARGINS = {
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 0
+          },
+          xRange = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(lineData, function (d) {
+              return d.num;
+          }), d3.max(lineData, function (d) {
+              return d.num;
+          })]),
+          yRange = d3.scale.linear().range([ MARGINS.top,HEIGHT - MARGINS.bottom]).domain([d3.min(lineData, function (d) {
+              return d.r;
+          }), d3.max(lineData, function (d) {
+              return d.r;
+          })]),
+          xAxis = d3.svg.axis()
+            .scale(xRange)
+            .tickSize(5)
+            .tickSubdivide(true),
+          yAxis = d3.svg.axis()
+            .scale(yRange)
+            .tickSize(5)
+            .orient('left')
+            .tickSubdivide(true);
+
+          vis.append('svg:g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate(0,' + (HEIGHT - MARGINS.bottom) + ')')
+            .call(xAxis);
+
+          vis.append('svg:g')
+            .attr('class', 'y axis')
+            .attr('transform', 'translate(' + (MARGINS.left) + ',0)')
+            .call(yAxis);
+
+          var lineFunc = d3.svg.line()
+          .x(function (d) {
+              return xRange(d.num);
+          })
+          .y(function (d) {
+              return yRange(d.r);
+          })
+          .interpolate('linear');
+
+          vis.append('svg:path')
+          .attr('d', lineFunc(lineData))
+          .attr('stroke', 'blue')
+          .attr('stroke-width', 2)
+          .attr('fill', 'none');
+      }
+    </script>
+   
+    
+    <div class="container">
+    </div>
+    <script src={{ url_for('static', filename='./bower_components/jquery/dist/jquery.min.js') }}></script>
+    <script src={{ url_for('static', filename='./bower_components/bootstrap/dist/js/bootstrap.min.js') }}></script>
+    <script src={{ url_for('static', filename='./bower_components/d3/d3.min.js') }}></script>
+
+    
+
+    {% endblock %}
+

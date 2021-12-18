@@ -1,0 +1,181 @@
+﻿<head>
+    <meta charset="utf-8">
+   
+    <style>
+      
+
+        body {
+            font-family: 'Lato';
+            background-color: #f0f0f0;
+            margin: 0px auto;
+            max-width: 1150px;
+            height:900px;
+        }
+
+        #overlay,#face {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            -o-transform: scaleX(-1);
+            -webkit-transform: scaleX(-1);
+            transform: scaleX(-1);
+            -ms-filter: fliph; /*IE*/
+            filter: fliph; /*IE*/
+        }
+        
+
+        #videoel {
+            -o-transform: scaleX(-1);
+            -webkit-transform: scaleX(-1);
+            transform: scaleX(-1);
+            -ms-filter: fliph; /*IE*/
+            filter: fliph; /*IE*/
+        }
+
+        #container {
+            position: relative;
+            width: 370px;
+            /*margin : 0px auto;*/
+        }
+
+        #content {
+            margin-top: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 320px;
+        }
+
+        h2 {
+            font-weight: 400;
+        }
+
+        .btn {
+            margin-top:auto;
+            font-family: 'Lato';
+            font-size: 16px;
+        }
+
+        #controls {
+            text-align: center;
+        }
+
+        #emotion_container {
+            width: 320px;
+        }
+
+        #emotion_icons {
+           padding-left: 5px;
+        }
+
+        .emotion_icon {
+            width: 15px;
+            margin-top: 5px;
+            /*margin-left : 13px;*/
+            margin-left: 5px;
+        }
+
+        #emotion_chart, #emotion_icons,#chart {
+            margin: 0 auto;
+            width: 320px;
+        }
+
+        #icon1, #icon2, #icon3, #icon4, #icon5, #icon6 {
+            visibility: hidden;
+        }
+
+        /* d3 */
+        .bar {
+            fill: steelblue;
+            fill-opacity: .9;
+        }
+    </style>
+    
+</head>
+{% extends "layout.html" %}
+{% block content %}
+
+
+<div id="content">
+    <h2>Health Vitals From Face</h2>
+    <div style="width:320px;" >
+      <span style="text-align: center;">Statistics: </span>
+      <var id="stat" style="text-align: center;">PR: SPO2:</var>
+       
+        <var id="extras" style="text-align: center;"></var>
+    </div>
+    <div id="controls" style="width:320px;">
+        <span>
+    Calculation in progress: <progress id="prg" value="0" max="100"> </progress>
+    <input id="startbutton" class="btn" disabled="disabled" type="button" value="wait, loading video" onclick="startVideo()" />
+        </span>
+    
+    </div>
+    
+    <div id="container" style="width:320px;">
+        <video id="videoel" width="320" height="240"  style="width:320px; height:240px;"preload="auto" loop></video>
+
+        <canvas id="overlay" width="320" height="240" style="width:320px; height:240px;"></canvas>
+        <canvas id="face" width="320" height="240">
+
+        </canvas>
+        
+            <div id="emotion_icons"  alignment-baseline="baseline" style="position:absolute; width:320px !important; display:block;z-index:9999">
+                <img class="emotion_icon" id="icon1" src={{ url_for('static', filename='./bower_components/clmtrackr/media/icon_angry.png') }}>&nbsp;
+                <img class="emotion_icon" id="icon2" src={{ url_for('static', filename='./bower_components/clmtrackr/media/icon_sad.png') }}>
+                <img class="emotion_icon" id="icon3" src={{ url_for('static', filename='./bower_components/clmtrackr/media/icon_surprised.png') }}>
+                <img class="emotion_icon" id="icon4" src={{ url_for('static', filename='./bower_components/clmtrackr/media/icon_happy.png') }}>
+            </div>
+            
+
+            <svg id="chart" height="120" width="320" style="width:320px; height:120px;" alignment-baseline="baseline"></svg>
+        
+        
+        
+    </div>
+      
+
+
+    <div id="emotion_container" style="width:320px; height:120px;">
+
+        <div id="emotion_chart" ></div>
+        
+
+    </div>
+
+
+    <script src={{ url_for('static', filename='./bower_components/clmtrackr/js/utils.js') }}></script>
+
+    <script src={{ url_for('static', filename='./bower_components/clmtrackr/js/clmtrackr.js') }}></script>
+    <script src={{ url_for('static', filename='./bower_components/clmtrackr/models/model_pca_20_svm_emotionDetection.js') }}></script>
+    <script src={{ url_for('static', filename='./bower_components/clmtrackr/js/emotion_classifier.js') }}></script>
+    <script src={{ url_for('static', filename='./bower_components/clmtrackr/js/emotionmodel.js') }}></script>
+
+    <script src={{ url_for('static', filename='./bower_components/clmtrackr/js/Stats.js') }}></script>
+    <script src={{ url_for('static', filename='./bower_components/jquery/dist/jquery.min.js') }}></script>
+    <script src={{ url_for('static', filename='./bower_components/bootstrap/dist/js/bootstrap.min.js') }}></script>
+    <script src={{ url_for('static', filename='./bower_components/d3/d3.min.js') }}></script>
+    <script src={{ url_for('static', filename='./js/fili.min.js') }}></script>
+  
+       
+ 
+       
+   
+      <script src={{ url_for('static', filename='./js/vitalsp.js') }}></script>
+   
+
+
+
+
+    <script>
+    /*
+Copyright (c) Acculi Labs Pvt. Ltd.
+// Notice: This software is IP protected and Copyrighted to Acculi Labs Pvt. Ltd.
+//Copying, Reingineering, Reverse Engineering
+*/
+    
+
+    </script>
+
+    <div></div>
+    {% endblock %}
+</div>
