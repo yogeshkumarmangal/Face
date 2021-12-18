@@ -304,13 +304,16 @@ def traffic():
         app_name='Lyfas Camera Based Health Monitoring',
 
     )
-
+from os import environ
+from waitress import serve
+import os
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
+APP_STATIC = os.path.join(APP_ROOT, 'static')
 from PIL import Image
 import requests
 from io import BytesIO
 import numpy as np;
 import os
-from runserver import APP_STATIC
 def detect_faces(image):
     cascade_fname=os.path.join(APP_STATIC, 'haarcascade_frontalface_default.xml')
     faceCascade = cv2.CascadeClassifier(cascade_fname)
