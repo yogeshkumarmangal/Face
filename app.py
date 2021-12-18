@@ -5,7 +5,6 @@ The flask application package.
 from flask import Flask
 from datetime import datetime
 from flask import render_template,jsonify
-from FlaskWebProject1 import app
 from csv import *
 import cv2
 app = Flask(__name__)
