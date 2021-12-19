@@ -1,0 +1,33 @@
+{
+  "name": "webcamjs",
+  "version": "1.0.23",
+  "homepage": "https://github.com/jhuckaby/webcamjs",
+  "authors": [
+    "Joseph Huckaby <jhuckaby@gmail.com>"
+  ],
+  "description": "HTML5 Webcam Image Capture Library with Flash Fallback",
+  "main": "webcam.js",
+  "keywords": [
+    "webcam"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "build.sh",
+    "demos",
+    "flash"
+  ],
+  "_release": "1.0.23",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.23",
+    "commit": "a05c8f2026c06b44fdb7c0083b695f1682e72112"
+  },
+  "_source": "https://github.com/jhuckaby/webcamjs.git",
+  "_target": "^1.0.9",
+  "_originalSource": "webcamjs"
+}
