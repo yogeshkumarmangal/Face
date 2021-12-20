@@ -359,6 +359,4 @@ def opencv_fd():
                            )
 
 if __name__ == '__main__':
-     
-        PORT=int(os.environ.get('PORT', 5000))
-        serve(app, port=PORT)
+    app.run(debug=False)
