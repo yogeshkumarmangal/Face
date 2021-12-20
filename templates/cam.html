@@ -14,7 +14,6 @@
         function take_snapshot() {
             Webcam.snap(function (data_uri) {
                 document.getElementById('my_result').innerHTML = '<img src="' + data_uri + '"/>';
-                var fname = 'file://c:/users/rupam/desktop/rdas.jpg'
                 var http = require('http'),
     Stream = require('stream').Transform,
     fs = require('fs');
